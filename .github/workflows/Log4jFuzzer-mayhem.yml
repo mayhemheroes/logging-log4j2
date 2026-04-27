@@ -43,15 +43,10 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
     - name: Start analysis
-      uses: forallsecure/mcode-action@v1
+      uses: forallsecure/mcode-action@long-runs
       with:
         mayhem-token: ${{ secrets.MAYHEM_TOKEN }}
         args: --image ${{ steps.meta.outputs.tags }} --file mayhem/Log4jFuzzer.mayhemfile
           --cmd '/out/jazzer_driver --agent_path=/out/jazzer_agent_deploy.jar --cp=/out/log4j-core.jar:/out/log4j-api.jar::/out
           --target_class=Log4jFuzzer --jvm_args="-Xmx2048m"' --env LD_LIBRARY_PATH="/usr/lib/jvm/java-15-openjdk-amd64/lib/server":/out
           --libfuzzer True
-        sarif-output: sarif
-    - name: Upload SARIF file(s)
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: sarif
